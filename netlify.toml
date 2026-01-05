@@ -1,0 +1,43 @@
+# Netlify Configuration for CaliDevs Apps
+
+[build]
+  publish = "."
+  
+  # Script para construir todas las apps React
+  # Despues del build, elimina el index.html de desarrollo y copia los archivos compilados
+  command = """
+    cd apps/markup-app && npm install && npm run build && rm -f index.html && cp -rf dist/* . && cd ../..
+  """
+
+# Headers for security and caching
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache React app assets
+[[headers]]
+  for = "/apps/markup-app/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# MIME types para archivos JS
+[[headers]]
+  for = "/apps/markup-app/assets/*.js"
+  [headers.values]
+    Content-Type = "application/javascript"
+
+# Redirect para SPA de markup-app (React Router)
+[[redirects]]
+  from = "/apps/markup-app/*"
+  to = "/apps/markup-app/index.html"
+  status = 200
