@@ -775,10 +775,6 @@
                     <span class="nav-icon">✏️</span>
                     <span class="nav-text">Capturar Notas</span>
                 </div>
-                <div class="nav-item" data-view="sessions">
-                    <span class="nav-icon">📂</span>
-                    <span class="nav-text">Mis Sesiones</span>
-                </div>
                 <div class="nav-item" data-view="all-tasks">
                     <span class="nav-icon">📋</span>
                     <span class="nav-text">Todos los Pendientes</span>
@@ -848,22 +844,6 @@ Ejemplo:
                 </div>
             </div>
 
-            <!-- Sessions View -->
-            <div id="sessionsView" class="view-content" style="display: none;">
-                <div class="header">
-                    <div class="header-top">
-                        <a href="../../index.html" class="back-to-dashboard">← Dashboard</a>
-                    </div>
-                    <h1>Mis Sesiones de Grabación</h1>
-                    <p>Todas tus notas organizadas por fecha y hora</p>
-                </div>
-                <div id="sessionsContent">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <div class="status-text">Cargando sesiones...</div>
-                    </div>
-                </div>
-            </div>
 
             <!-- All Tasks View -->
             <div id="allTasksView" class="view-content" style="display: none;">
@@ -1536,48 +1516,6 @@ ${noteText}`
         };
 
         // Display functions
-        function displaySessions() {
-            const container = document.getElementById('sessionsContent');
-            
-            if (window.sessions.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">🔭</div>
-                        <div class="empty-text">No hay sesiones todavía. ¡Crea tu primera grabación!</div>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-            window.sessions.forEach((session) => {
-                const completed = session.tasks.filter(t => t.completed).length;
-                const total = session.tasks.length;
-                
-                html += `
-                    <div class="card session-card">
-                        <div class="session-header">
-                            <div class="session-info">
-                                <div class="session-icon">🎙️</div>
-                                <div class="session-meta">
-                                    <h3>Sesión del ${session.date}</h3>
-                                    <p>${session.time} • ${total} tareas • ${completed} completadas</p>
-                                </div>
-                            </div>
-                            <button class="btn-delete" onclick="deleteSession('${session.id}')" title="Eliminar">🗑️</button>
-                        </div>
-                        <div class="tasks-grid">
-                `;
-                
-                session.tasks.forEach((task, idx) => {
-                    html += renderTaskItem(session.id, idx, task);
-                });
-                
-                html += '</div></div>';
-            });
-            
-            container.innerHTML = html;
-        }
 
         function displayAllTasks() {
             const container = document.getElementById('allTasksContent');
