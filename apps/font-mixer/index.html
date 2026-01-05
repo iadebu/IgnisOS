@@ -202,6 +202,69 @@
             border-color: var(--accent);
         }
 
+        .btn-crazy {
+            background: linear-gradient(135deg, #9f7aea, #ed64a6, #f6ad55);
+            color: white;
+            box-shadow: 0 4px 14px rgba(159, 122, 234, 0.4);
+            animation: rainbow-glow 3s ease-in-out infinite;
+        }
+
+        .btn-crazy:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(237, 100, 166, 0.5);
+        }
+
+        @keyframes rainbow-glow {
+            0%, 100% { box-shadow: 0 4px 14px rgba(159, 122, 234, 0.4); }
+            33% { box-shadow: 0 4px 14px rgba(237, 100, 166, 0.4); }
+            66% { box-shadow: 0 4px 14px rgba(246, 173, 85, 0.4); }
+        }
+
+        /* Category Filters */
+        .category-filters {
+            margin-bottom: 20px;
+        }
+
+        .category-filters h3 {
+            color: var(--light);
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-chip {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--bg-darker);
+            color: var(--light-muted);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--accent);
+            color: var(--light);
+        }
+
+        .filter-chip.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
         .help-section {
             margin-top: 28px;
             padding-top: 28px;
@@ -684,8 +747,21 @@
                     </div>
                 </div>
 
+                <div class="category-filters">
+                    <h3>🏷️ Filtrar por Categoría</h3>
+                    <div class="filter-chips">
+                        <button class="filter-chip active" data-category="all" onclick="setCategory('all')">Todas</button>
+                        <button class="filter-chip" data-category="display" onclick="setCategory('display')">🎭 Display</button>
+                        <button class="filter-chip" data-category="handwriting" onclick="setCategory('handwriting')">✍️ Handwriting</button>
+                        <button class="filter-chip" data-category="serif" onclick="setCategory('serif')">📰 Serif</button>
+                        <button class="filter-chip" data-category="sans-serif" onclick="setCategory('sans-serif')">🔲 Sans-Serif</button>
+                        <button class="filter-chip" data-category="monospace" onclick="setCategory('monospace')">💻 Monospace</button>
+                    </div>
+                </div>
+
                 <div class="controls">
                     <button class="btn btn-primary" onclick="getRandomFont()">🎲 Fuente Aleatoria</button>
+                    <button class="btn btn-crazy" onclick="getRandomFont('crazy')">🤪 Modo Locochón</button>
                     <button class="btn btn-secondary" onclick="showManualMixer()">✏️ Mezcla Manual</button>
                     <button class="btn btn-secondary" onclick="resetSelection()">🔄 Limpiar</button>
                 </div>
@@ -790,6 +866,27 @@
         let lastRandomFonts = [];
         let manualHeadingFont = null;
         let manualBodyFont = null;
+        let currentCategory = 'all';
+        let crazyMode = false;
+
+        // Función para filtrar por categoría
+        function setCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.category === category);
+            });
+
+            // Si hay una fuente seleccionada, regenerar pares
+            if (currentSelectedFont) {
+                generateFontPairs(currentSelectedFont.family, currentSelectedFont.category);
+            }
+        }
+
+        // Obtener fuentes filtradas
+        function getFilteredFonts() {
+            if (currentCategory === 'all') return allFonts;
+            return allFonts.filter(f => f.category === currentCategory);
+        }
 
         // Load all fonts from Google Fonts API
         async function loadAllGoogleFonts() {
@@ -888,21 +985,48 @@
             const pairsContainer = document.getElementById('pairsContainer');
             pairsContainer.innerHTML = '';
 
-            // Pairing rules
+            // Pairing rules normales
             const pairingRules = {
-                'serif': ['sans-serif', 'serif'],
-                'sans-serif': ['serif', 'sans-serif', 'display'],
-                'display': ['sans-serif', 'serif'],
-                'handwriting': ['sans-serif', 'serif'],
-                'monospace': ['sans-serif']
+                'serif': ['sans-serif', 'serif', 'display'],
+                'sans-serif': ['serif', 'sans-serif', 'display', 'handwriting'],
+                'display': ['sans-serif', 'serif', 'handwriting'],
+                'handwriting': ['sans-serif', 'serif', 'display'],
+                'monospace': ['sans-serif', 'serif']
             };
 
-            const preferredCategories = pairingRules[mainCategory] || ['sans-serif', 'serif'];
-            
-            let suggestions = allFonts.filter(font => 
-                font.family !== mainFont && 
+            // En modo locochón, priorizar display y handwriting
+            const crazyPairingRules = {
+                'serif': ['display', 'handwriting', 'sans-serif'],
+                'sans-serif': ['display', 'handwriting', 'serif'],
+                'display': ['handwriting', 'display', 'sans-serif'],
+                'handwriting': ['display', 'handwriting', 'serif'],
+                'monospace': ['display', 'handwriting', 'sans-serif']
+            };
+
+            const rules = crazyMode ? crazyPairingRules : pairingRules;
+            let preferredCategories = rules[mainCategory] || ['sans-serif', 'serif', 'display'];
+
+            // Si hay filtro de categoría activo, usarlo
+            if (currentCategory !== 'all') {
+                preferredCategories = [currentCategory];
+            }
+
+            let suggestions = allFonts.filter(font =>
+                font.family !== mainFont &&
                 preferredCategories.includes(font.category)
-            ).slice(0, 20);
+            );
+
+            // En modo locochón, mezclar aleatoriamente y tomar más fuentes raras
+            if (crazyMode) {
+                suggestions = suggestions
+                    .sort(() => Math.random() - 0.5) // Shuffle
+                    .slice(0, 25);
+            } else {
+                // Modo normal: mezclar un poco para variedad pero mantener popularidad
+                const popular = suggestions.slice(0, 30);
+                const random = suggestions.slice(30, 100).sort(() => Math.random() - 0.5).slice(0, 10);
+                suggestions = [...popular.slice(0, 15), ...random].slice(0, 20);
+            }
 
             suggestions.forEach((font, index) => {
                 loadFont(font.family);
@@ -978,19 +1102,34 @@
         }
 
         // Random font
-        async function getRandomFont() {
+        async function getRandomFont(mode = 'normal') {
             if (allFonts.length === 0) await loadAllGoogleFonts();
-            
-            let availableFonts = allFonts.filter(f => !lastRandomFonts.includes(f.family));
+
+            // Activar/desactivar modo locochón
+            crazyMode = (mode === 'crazy');
+
+            let availableFonts = getFilteredFonts().filter(f => !lastRandomFonts.includes(f.family));
             if (availableFonts.length < 20) {
                 lastRandomFonts = [];
-                availableFonts = allFonts;
+                availableFonts = getFilteredFonts();
             }
-            
-            const randomFont = availableFonts[Math.floor(Math.random() * Math.min(100, availableFonts.length))];
+
+            // En modo locochón, priorizar fuentes display y handwriting
+            if (crazyMode) {
+                const crazyFonts = availableFonts.filter(f =>
+                    f.category === 'display' || f.category === 'handwriting'
+                );
+                // Si hay suficientes fuentes locas, usar esas; si no, todas
+                if (crazyFonts.length > 10) {
+                    availableFonts = crazyFonts;
+                }
+            }
+
+            const randomIndex = Math.floor(Math.random() * Math.min(200, availableFonts.length));
+            const randomFont = availableFonts[randomIndex];
             lastRandomFonts.push(randomFont.family);
             if (lastRandomFonts.length > 30) lastRandomFonts.shift();
-            
+
             selectFont(randomFont.family, randomFont.category);
         }
 
@@ -1017,32 +1156,60 @@
         function populateManualLists() {
             const headingList = document.getElementById('headingFontList');
             const bodyList = document.getElementById('bodyFontList');
-            
+
             headingList.innerHTML = '';
             bodyList.innerHTML = '';
-            
-            allFonts.slice(0, 200).forEach(font => {
-                loadFont(font.family);
-                
+
+            // Cargar TODAS las fuentes (o hasta 800 para no saturar)
+            const fontsToShow = allFonts.slice(0, 800);
+
+            // Agrupar por categoría para mejor organización
+            const categories = ['display', 'handwriting', 'serif', 'sans-serif', 'monospace'];
+            const sortedFonts = [];
+
+            // Primero las locas (display, handwriting), luego el resto
+            categories.forEach(cat => {
+                const catFonts = fontsToShow.filter(f => f.category === cat);
+                sortedFonts.push(...catFonts);
+            });
+
+            sortedFonts.forEach(font => {
+                // Solo cargar la fuente cuando sea visible (lazy loading manual)
+                const categoryEmoji = {
+                    'display': '🎭',
+                    'handwriting': '✍️',
+                    'serif': '📰',
+                    'sans-serif': '🔲',
+                    'monospace': '💻'
+                }[font.category] || '🔤';
+
                 const headingItem = document.createElement('div');
                 headingItem.className = 'font-item';
+                headingItem.dataset.fontFamily = font.family;
                 headingItem.innerHTML = `
                     <div style="font-family: '${font.family}', ${font.category}; font-size: 15px; font-weight: 500; color: var(--light);">${font.family}</div>
-                    <div style="font-size: 11px; color: var(--light-muted); margin-top: 2px;">${font.category}</div>
+                    <div style="font-size: 11px; color: var(--light-muted); margin-top: 2px;">${categoryEmoji} ${font.category}</div>
                 `;
-                headingItem.onclick = () => selectManualHeading(font, headingItem);
+                headingItem.onclick = () => {
+                    loadFont(font.family);
+                    selectManualHeading(font, headingItem);
+                };
                 headingList.appendChild(headingItem);
-                
+
                 const bodyItem = document.createElement('div');
                 bodyItem.className = 'font-item';
+                bodyItem.dataset.fontFamily = font.family;
                 bodyItem.innerHTML = `
                     <div style="font-family: '${font.family}', ${font.category}; font-size: 15px; color: var(--light);">${font.family}</div>
-                    <div style="font-size: 11px; color: var(--light-muted); margin-top: 2px;">${font.category}</div>
+                    <div style="font-size: 11px; color: var(--light-muted); margin-top: 2px;">${categoryEmoji} ${font.category}</div>
                 `;
-                bodyItem.onclick = () => selectManualBody(font, bodyItem);
+                bodyItem.onclick = () => {
+                    loadFont(font.family);
+                    selectManualBody(font, bodyItem);
+                };
                 bodyList.appendChild(bodyItem);
             });
-            
+
             document.getElementById('headingSearch').oninput = (e) => filterFontList('headingFontList', e.target.value);
             document.getElementById('bodySearch').oninput = (e) => filterFontList('bodyFontList', e.target.value);
         }

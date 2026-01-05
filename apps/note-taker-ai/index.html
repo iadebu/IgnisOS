@@ -1243,7 +1243,7 @@ Analiza esta nota y extrae TODAS las tareas:
 - Urgencia (Alta/Media/Baja)
 - Tipo (Trabajo/Personal)
 - Fecha límite DD/MM/YYYY o null
-- Responsables: array de (Sara, Anthony, Ian, JC, Marlene, Papá, Daniel, Carlos Armando) o []
+- Responsables: array de (Sara, Ian, JC, Marlene, Papá, Carlos Armando) o []
 
 Responde SOLO con JSON válido.
 
@@ -1467,12 +1467,10 @@ ${noteText}`
                     <option value="">+ Agregar</option>
                     <option value="Carlos Armando">Carlos Armando</option>
                     <option value="Sara">Sara</option>
-                    <option value="Vladimir">Vladimir</option>
                     <option value="Ian">Ian</option>
                     <option value="JC">JC</option>
                     <option value="Marlene">Marlene</option>
                     <option value="Papá">Papá</option>
-                    <option value="Daniel">Daniel</option>
                 </select>
             </div>`;
             return html;
@@ -1661,7 +1659,7 @@ ${noteText}`
             }
 
             let html = '';
-            const members = ['Carlos Armando', 'Sara', 'Anthony', 'Ian', 'JC', 'Marlene', 'Papá', 'Daniel'];
+            const members = ['Carlos Armando', 'Sara', 'Ian', 'JC', 'Marlene', 'Papá'];
             
             members.forEach(member => {
                 const tasks = active.filter(t => t.responsibles?.includes(member));
