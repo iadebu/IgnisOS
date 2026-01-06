@@ -2,12 +2,7 @@
 
 [build]
   publish = "."
-  
-  # Script para construir todas las apps React
-  # Despues del build, elimina el index.html de desarrollo y copia los archivos compilados
-  command = """
-    cd apps/markup-app && npm install && npm run build && rm -f index.html && cp -rf dist/* . && cd ../..
-  """
+  # No build command - markup-app is pre-built
 
 # Headers for security and caching
 [[headers]]
