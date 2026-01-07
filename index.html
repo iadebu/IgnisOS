@@ -3,30 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calidevs</title>
-    <!-- Global CSS -->
+    <title>IgnisOS - Platform</title>
     <link rel="stylesheet" href="./css/global.css">
     <style>
         /* ==========================================================================
-           DASHBOARD SPECIFIC STYLES
+           IGNIS OS PLATFORM - MODULAR ARCHITECTURE
            ========================================================================== */
 
-        /* Main Dashboard */
-        .dashboard {
+        * { box-sizing: border-box; }
+
+        /* Auth Screen */
+        #authOverlay { z-index: 9999; }
+
+        /* Platform Layout */
+        #platform {
             display: none;
             min-height: 100vh;
         }
 
-        .dashboard.show {
+        #platform.show {
+            display: flex;
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .platform-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-dark);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent), #ff8c42);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .sidebar-logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-logo-text span {
+            color: var(--accent);
+        }
+
+        /* User Info */
+        .sidebar-user {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), #ff8c42);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .user-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: var(--light-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Navigation */
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            padding: 0 24px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--light-faded);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: var(--light-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 107, 53, 0.08);
+            color: var(--light);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 107, 53, 0.12);
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 10px 16px;
+            background: rgba(252, 129, 129, 0.1);
+            border: 1px solid rgba(252, 129, 129, 0.2);
+            border-radius: 10px;
+            color: var(--danger);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .platform-main {
+            flex: 1;
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--bg-darker);
+        }
+
+        /* Module Container */
+        .module-container {
+            display: none;
+            padding: 32px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .module-container.active {
             display: block;
         }
 
-        /* Stats Bar */
-        .stats-bar {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Module Header */
+        .module-header {
+            margin-bottom: 32px;
+        }
+
+        .module-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .module-subtitle {
+            color: var(--light-muted);
+            font-size: 15px;
+        }
+
+        /* ==================== DASHBOARD MODULE ==================== */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
-            margin-bottom: 48px;
+            margin-bottom: 32px;
         }
 
         .stat-card {
@@ -37,269 +262,489 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
         }
 
         .stat-icon {
-            width: 52px;
-            height: 52px;
+            width: 56px;
+            height: 56px;
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 26px;
         }
 
-        .stat-icon.apps { background: rgba(255, 107, 53, 0.15); }
-        .stat-icon.tasks { background: rgba(72, 187, 120, 0.15); }
-        .stat-icon.team { background: rgba(66, 153, 225, 0.15); }
+        .stat-icon.orange { background: rgba(255, 107, 53, 0.15); }
+        .stat-icon.green { background: rgba(72, 187, 120, 0.15); }
+        .stat-icon.blue { background: rgba(66, 153, 225, 0.15); }
+        .stat-icon.purple { background: rgba(159, 122, 234, 0.15); }
 
-        .stat-content h3 {
-            font-size: 28px;
+        .stat-value {
+            font-size: 32px;
             font-weight: 800;
             line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--light-muted);
+            margin-top: 4px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .quick-action {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .quick-action:hover {
+            border-color: var(--accent);
+            background: rgba(255, 107, 53, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .quick-action-title {
+            font-weight: 600;
+            font-size: 14px;
             margin-bottom: 4px;
         }
 
-        .stat-content p {
-            font-size: 14px;
+        .quick-action-desc {
+            font-size: 12px;
             color: var(--light-muted);
         }
 
-        /* Section */
-        .section {
-            margin-bottom: 48px;
-        }
-
-        .section-header {
+        /* Section Title */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
+            gap: 10px;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 107, 53, 0.03);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: var(--bg-darker);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--light-muted);
+        }
+
+        /* ==================== CARDS GRID (for modules) ==================== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: rgba(255, 107, 53, 0.15);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--light-muted);
+        }
+
+        .card-body {
+            color: var(--light-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-meta {
+            font-size: 13px;
+            color: var(--light-muted);
+        }
+
+        .card-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .card-badge.success {
+            background: rgba(72, 187, 120, 0.15);
+            color: var(--success);
+        }
+
+        .card-badge.warning {
+            background: rgba(236, 201, 75, 0.15);
+            color: var(--warning);
+        }
+
+        .card-badge.danger {
+            background: rgba(252, 129, 129, 0.15);
+            color: var(--danger);
+        }
+
+        /* ==================== FORMS ==================== */
+        .form-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            max-width: 600px;
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: 700;
             margin-bottom: 24px;
         }
 
-        .section-title {
-            font-size: 22px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-badge {
-            background: var(--accent);
-            color: white;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        /* Apps Grid */
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
-        }
-
-        .app-card {
+        /* ==================== EMPTY STATE ==================== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 40px;
             background: var(--bg-dark);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            border-radius: 16px;
         }
 
-        .app-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: var(--shadow-lg), 0 0 40px var(--accent-glow);
+        .empty-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            opacity: 0.5;
         }
 
-        .app-card-banner {
-            height: 120px;
-            background: linear-gradient(135deg, var(--bg-darker), var(--bg-darker));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .app-card-banner::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 50% 120%, var(--accent-glow), transparent 70%);
-        }
-
-        .app-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--accent), #ff8c42);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 0 8px 24px var(--accent-glow);
-            position: relative;
-            z-index: 1;
-        }
-
-        .app-card-content {
-            padding: 24px;
-        }
-
-        .app-name {
+        .empty-title {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 8px;
         }
 
-        .app-description {
-            font-size: 14px;
+        .empty-text {
             color: var(--light-muted);
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .app-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .app-tag {
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .app-tag.premium {
-            background: rgba(255, 107, 53, 0.15);
-            color: var(--accent);
-        }
-
-        .app-tag.free {
-            background: rgba(72, 187, 120, 0.15);
-            color: var(--success);
-        }
-
-        .app-tag.category {
-            background: var(--bg-card);
-            color: var(--light-muted);
-        }
-
-        .app-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .app-btn {
-            flex: 1;
-            padding: 12px 20px;
-            border-radius: 10px;
             font-size: 14px;
-            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        /* ==================== LOADING ==================== */
+        .loading {
             text-align: center;
-            text-decoration: none;
-            transition: all 0.2s;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ==================== TOAST ==================== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--bg-dark);
+            color: var(--light);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            z-index: 1001;
+            animation: slideIn 0.4s ease, slideOut 0.4s 2.6s ease forwards;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(400px); opacity: 0; }
+        }
+
+        /* ==================== MOBILE ==================== */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            border: none;
+            font-size: 20px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 99;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .platform-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .platform-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .platform-main {
+                margin-left: 0;
+            }
+
+            .module-container {
+                padding: 80px 20px 20px;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .module-title {
+                font-size: 24px;
+            }
+        }
+
+        /* ==================== SUB-VIEWS (for modules with multiple views) ==================== */
+        .sub-view {
+            display: none;
+        }
+
+        .sub-view.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--light-muted);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 24px;
+            transition: all 0.2s;
             font-family: inherit;
         }
 
-        .app-btn-primary {
+        .back-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-darker);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #ff8c42);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.success {
+            background: linear-gradient(90deg, var(--success), #38a169);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: var(--bg-dark);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: var(--light-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
             background: var(--accent);
             color: white;
         }
 
-        .app-btn-primary:hover {
-            background: var(--accent-hover);
-        }
-
-        .app-btn-secondary {
-            background: var(--bg-card);
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 107, 53, 0.1);
             color: var(--light);
-            border: 1px solid var(--border);
         }
-
-        .app-btn-secondary:hover {
-            background: var(--bg-card-hover);
-        }
-
-        .app-locked {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: rgba(26, 32, 44, 0.9);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--warning);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Coming Soon Card */
-        .app-card.coming-soon {
-            opacity: 0.6;
-        }
-
-        .app-card.coming-soon:hover {
-            transform: none;
-            border-color: var(--border);
-            box-shadow: none;
-        }
-
-        .coming-soon-badge {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: var(--bg-darker);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--light-faded);
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 32px;
-            color: var(--light-faded);
-            font-size: 14px;
-            border-top: 1px solid var(--border);
-            margin-top: 48px;
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
-            .apps-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* App Card Animations */
-        .app-card {
-            animation: fadeInUp 0.5s ease-out backwards;
-        }
-
-        .app-card:nth-child(1) { animation-delay: 0.1s; }
-        .app-card:nth-child(2) { animation-delay: 0.2s; }
-        .app-card:nth-child(3) { animation-delay: 0.3s; }
-        .app-card:nth-child(4) { animation-delay: 0.4s; }
-        .app-card:nth-child(5) { animation-delay: 0.5s; }
-        .app-card:nth-child(6) { animation-delay: 0.6s; }
     </style>
 </head>
 <body>
@@ -313,10 +758,10 @@
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                         </svg>
                     </div>
-                    <div class="auth-logo-text">Cali<span>Devs</span></div>
+                    <div class="auth-logo-text">Ignis<span>OS</span></div>
                 </div>
                 <h1 class="auth-title" id="authTitle">Bienvenido</h1>
-                <p class="auth-subtitle" id="authSubtitle">Inicia sesión para acceder a tus aplicaciones</p>
+                <p class="auth-subtitle" id="authSubtitle">Inicia sesion para acceder a la plataforma</p>
             </div>
 
             <div id="authMessage" class="auth-message"></div>
@@ -333,166 +778,357 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Contraseña</label>
-                    <input type="password" id="authPassword" class="form-input" placeholder="••••••••" required>
+                    <label class="form-label">Contrasena</label>
+                    <input type="password" id="authPassword" class="form-input" placeholder="********" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-full" id="authSubmit">
-                    Iniciar Sesión
+                    Iniciar Sesion
                 </button>
             </form>
 
             <div class="auth-divider">o</div>
 
             <button class="btn btn-secondary btn-full" id="authToggle">
-                ¿No tienes cuenta? Regístrate
+                No tienes cuenta? Registrate
             </button>
         </div>
     </div>
 
-    <!-- Dashboard -->
-    <div id="dashboard" class="dashboard">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo">
-                    
-                    <div class="logo-text">Cali<span>devs</span> apps</div>
-                </div>
+    <!-- Platform -->
+    <div id="platform">
+        <div class="mobile-toggle" onclick="toggleSidebar()">☰</div>
+        <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
-                <div class="header-nav">
-                    <div class="user-menu">
-                        <div class="user-info">
-                            <div class="user-name" id="userName">Usuario</div>
-                            <div class="user-email" id="userEmail">email@ejemplo.com</div>
-                        </div>
-                        <div class="user-avatar" id="userAvatar">U</div>
-                        <button class="btn-logout" id="btnLogout">Cerrar sesión</button>
-                    </div>
+        <!-- Sidebar -->
+        <aside class="platform-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">🔥</div>
+                    <div class="sidebar-logo-text">Ignis<span>OS</span></div>
                 </div>
             </div>
-        </header>
 
-        <main class="main">
-            <div class="page-header">
-                <h1 class="page-title">Tus <span>Aplicaciones</span></h1>
-                <p class="page-subtitle">Accede a todas las herramientas de productividad de Calidevs desde un solo lugar.</p>
-            </div>
-
-            <div class="stats-bar">
-                <div class="stat-card">
-                    <div class="stat-icon apps">📱</div>
-                    <div class="stat-content">
-                        <h3 id="statApps">3</h3>
-                        <p>Apps Disponibles</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon tasks">✅</div>
-                    <div class="stat-content">
-                        <h3 id="statTasks">--</h3>
-                        <p>Tareas Activas</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon team">👥</div>
-                    <div class="stat-content">
-                        <h3>8</h3>
-                        <p>Miembros del Equipo</p>
+            <div class="sidebar-user">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Usuario</div>
+                        <div class="user-email" id="userEmail">email@ejemplo.com</div>
                     </div>
                 </div>
             </div>
 
-            <section class="section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        🚀 Aplicaciones Activas
-                        <span class="section-badge">3</span>
-                    </h2>
-                </div>
-
-                <div class="apps-grid" id="appsGrid">
-                    <!-- Note Taker AI -->
-                    <div class="app-card" data-app="noteTakerAI" data-requires-auth="true">
-                        <div class="app-card-banner">
-                            <div class="app-icon">📝</div>
-                        </div>
-                        <div class="app-card-content">
-                            <h3 class="app-name">Note Taker AI</h3>
-                            <p class="app-description">Captura notas por voz o texto y deja que la IA las organice en tareas con prioridades, fechas y responsables.</p>
-                            <div class="app-meta">
-                                <span class="app-tag premium">🔐 Premium</span>
-                                <span class="app-tag category">Productividad</span>
-                            </div>
-                            <div class="app-actions">
-                                <a href="./apps/note-taker-ai/index.html" class="app-btn app-btn-primary">Abrir App</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quality Control - Premium -->
-                    <div class="app-card" data-app="qualityControl" data-requires-auth="true">
-                        <div class="app-card-banner">
-                            <div class="app-icon">📊</div>
-                        </div>
-                        <div class="app-card-content">
-                            <h3 class="app-name">Quality Control</h3>
-                            <p class="app-description">Sistema de control de calidad para proyectos web con checklists, seguimiento de progreso y notas por tarea.</p>
-                            <div class="app-meta">
-                                <span class="app-tag premium">🔐 Premium</span>
-                                <span class="app-tag category">Gestión</span>
-                            </div>
-                            <div class="app-actions">
-                                <a href="./apps/quality-control/index.html" class="app-btn app-btn-primary">Abrir App</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Font Mixer - Free -->
-                    <div class="app-card" data-app="fontMixer" data-requires-auth="false">
-                        <div class="app-card-banner">
-                            <div class="app-icon" style="background: linear-gradient(135deg, #48bb78, #38a169);">🔤</div>
-                        </div>
-                        <div class="app-card-content">
-                            <h3 class="app-name">Font Mixer</h3>
-                            <p class="app-description">Encuentra combinaciones perfectas de tipografías de Google Fonts con vista previa en vivo y controles de tamaño.</p>
-                            <div class="app-meta">
-                                <span class="app-tag free">✨ Gratis</span>
-                                <span class="app-tag category">Diseño</span>
-                            </div>
-                            <div class="app-actions">
-                                <a href="./apps/font-mixer/index.html" class="app-btn app-btn-primary">Abrir App</a>
-                            </div>
-                        </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Principal</div>
+                    <div class="nav-item active" data-module="dashboard">
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
                     </div>
                 </div>
-            </section>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Modulos</div>
+                    <div class="nav-item" data-module="torch">
+                        <span class="nav-icon">🔥</span>
+                        <span>TorchAI</span>
+                        <span class="nav-badge" id="torchBadge">0</span>
+                    </div>
+                    <div class="nav-item" data-module="quality">
+                        <span class="nav-icon">✅</span>
+                        <span>Control de Calidad</span>
+                    </div>
+                    <div class="nav-item" data-module="crm">
+                        <span class="nav-icon">👥</span>
+                        <span>CRM</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Herramientas</div>
+                    <div class="nav-item" data-module="fonts">
+                        <span class="nav-icon">🔤</span>
+                        <span>Font Mixer</span>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()">
+                    Cerrar Sesion
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="platform-main">
+            <!-- ==================== DASHBOARD MODULE ==================== -->
+            <div id="module-dashboard" class="module-container active">
+                <div class="module-header">
+                    <h1 class="module-title">Dashboard</h1>
+                    <p class="module-subtitle">Bienvenido a IgnisOS. Aqui tienes un resumen de tu actividad.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon orange">📋</div>
+                        <div>
+                            <div class="stat-value" id="statTasks">0</div>
+                            <div class="stat-label">Tareas Pendientes</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">✅</div>
+                        <div>
+                            <div class="stat-value" id="statProjects">0</div>
+                            <div class="stat-label">Proyectos QC</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue">👥</div>
+                        <div>
+                            <div class="stat-value" id="statClients">0</div>
+                            <div class="stat-label">Clientes</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">🔥</div>
+                        <div>
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Modulos Activos</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-title">⚡ Acciones Rapidas</h3>
+                <div class="quick-actions">
+                    <div class="quick-action" onclick="switchModule('torch')">
+                        <div class="quick-action-icon">🎤</div>
+                        <div class="quick-action-title">Capturar Nota</div>
+                        <div class="quick-action-desc">Graba o escribe una nota</div>
+                    </div>
+                    <div class="quick-action" onclick="switchModule('quality'); setTimeout(() => switchQualityView('new'), 100)">
+                        <div class="quick-action-icon">📁</div>
+                        <div class="quick-action-title">Nuevo Proyecto QC</div>
+                        <div class="quick-action-desc">Iniciar control de calidad</div>
+                    </div>
+                    <div class="quick-action" onclick="switchModule('crm'); setTimeout(() => switchCRMView('new'), 100)">
+                        <div class="quick-action-icon">👤</div>
+                        <div class="quick-action-title">Agregar Cliente</div>
+                        <div class="quick-action-desc">Registrar nuevo cliente</div>
+                    </div>
+                    <div class="quick-action" onclick="window.open('./apps/font-mixer/index.html', '_blank')">
+                        <div class="quick-action-icon">🔤</div>
+                        <div class="quick-action-title">Font Mixer</div>
+                        <div class="quick-action-desc">Combinar tipografias</div>
+                    </div>
+                </div>
+
+                <h3 class="section-title">📈 Actividad Reciente</h3>
+                <div class="activity-list" id="activityList">
+                    <div class="activity-item">
+                        <div class="activity-icon">🔥</div>
+                        <div class="activity-content">
+                            <div class="activity-text">Bienvenido a IgnisOS</div>
+                            <div class="activity-time">Ahora</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TORCH AI MODULE ==================== -->
+            <div id="module-torch" class="module-container">
+                <div class="module-header">
+                    <h1 class="module-title">🔥 TorchAI</h1>
+                    <p class="module-subtitle">Captura notas por voz o texto y deja que la IA las organice</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTorchTab('capture')">✏️ Capturar</button>
+                    <button class="tab-btn" onclick="switchTorchTab('tasks')">📋 Pendientes</button>
+                    <button class="tab-btn" onclick="switchTorchTab('priority')">🔥 Prioridad</button>
+                    <button class="tab-btn" onclick="switchTorchTab('team')">👥 Equipo</button>
+                </div>
+
+                <div id="torch-capture" class="sub-view active">
+                    <div class="form-card">
+                        <div class="form-title">📝 Nueva Nota</div>
+                        <div class="form-group">
+                            <label class="form-label">Escribe o dicta tu nota</label>
+                            <textarea id="torchInput" class="form-input" rows="6" placeholder="Escribe tus pendientes aqui...
+
+Ejemplo:
+- Llamar a Juan del proyecto X urgente para manana
+- Revisar el presupuesto de Maria antes del viernes
+- Comprar regalo para cumpleanos de mama"></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="processTorchNote()">
+                            ✨ Procesar con IA
+                        </button>
+                    </div>
+                </div>
+
+                <div id="torch-tasks" class="sub-view">
+                    <div id="torchTasksList">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <div>Cargando tareas...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="torch-priority" class="sub-view">
+                    <div id="torchPriorityList"></div>
+                </div>
+
+                <div id="torch-team" class="sub-view">
+                    <div id="torchTeamList"></div>
+                </div>
+            </div>
+
+            <!-- ==================== QUALITY CONTROL MODULE ==================== -->
+            <div id="module-quality" class="module-container">
+                <div class="module-header">
+                    <h1 class="module-title">✅ Control de Calidad</h1>
+                    <p class="module-subtitle">Gestiona la calidad de tus proyectos web</p>
+                </div>
+
+                <div id="quality-list" class="sub-view active">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3 class="section-title" style="margin: 0;">📁 Mis Proyectos</h3>
+                        <button class="btn btn-primary" onclick="switchQualityView('new')">+ Nuevo Proyecto</button>
+                    </div>
+                    <div id="qualityProjectsList">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <div>Cargando proyectos...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quality-new" class="sub-view">
+                    <button class="back-btn" onclick="switchQualityView('list')">← Volver</button>
+                    <div class="form-card">
+                        <div class="form-title">📁 Nuevo Proyecto</div>
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Proyecto *</label>
+                            <input type="text" id="qcProjectName" class="form-input" placeholder="Ej: Sitio Web Empresa XYZ">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cliente</label>
+                            <input type="text" id="qcClientName" class="form-input" placeholder="Nombre del cliente">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">URL del Sitio</label>
+                            <input type="url" id="qcProjectUrl" class="form-input" placeholder="https://ejemplo.com">
+                        </div>
+                        <button class="btn btn-primary" onclick="createQualityProject()">
+                            ✅ Crear Proyecto
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quality-detail" class="sub-view">
+                    <button class="back-btn" onclick="switchQualityView('list')">← Volver a Proyectos</button>
+                    <div id="qualityProjectDetail"></div>
+                </div>
+            </div>
+
+            <!-- ==================== CRM MODULE ==================== -->
+            <div id="module-crm" class="module-container">
+                <div class="module-header">
+                    <h1 class="module-title">👥 CRM</h1>
+                    <p class="module-subtitle">Gestiona tus clientes y sus proyectos</p>
+                </div>
+
+                <div id="crm-list" class="sub-view active">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3 class="section-title" style="margin: 0;">👥 Mis Clientes</h3>
+                        <button class="btn btn-primary" onclick="switchCRMView('new')">+ Nuevo Cliente</button>
+                    </div>
+                    <div id="crmClientsList">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <div>Cargando clientes...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="crm-new" class="sub-view">
+                    <button class="back-btn" onclick="switchCRMView('list')">← Volver</button>
+                    <div class="form-card">
+                        <div class="form-title">👤 Nuevo Cliente</div>
+                        <div class="form-group">
+                            <label class="form-label">Nombre / Empresa *</label>
+                            <input type="text" id="crmClientName" class="form-input" placeholder="Nombre del cliente o empresa">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="crmClientEmail" class="form-input" placeholder="cliente@empresa.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefono</label>
+                            <input type="tel" id="crmClientPhone" class="form-input" placeholder="+52 123 456 7890">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Notas</label>
+                            <textarea id="crmClientNotes" class="form-input" rows="3" placeholder="Notas adicionales..."></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="createCRMClient()">
+                            ✅ Guardar Cliente
+                        </button>
+                    </div>
+                </div>
+
+                <div id="crm-detail" class="sub-view">
+                    <button class="back-btn" onclick="switchCRMView('list')">← Volver a Clientes</button>
+                    <div id="crmClientDetail"></div>
+                </div>
+            </div>
+
+            <!-- ==================== FONT MIXER MODULE (redirect) ==================== -->
+            <div id="module-fonts" class="module-container">
+                <div class="module-header">
+                    <h1 class="module-title">🔤 Font Mixer</h1>
+                    <p class="module-subtitle">Encuentra combinaciones perfectas de tipografias</p>
+                </div>
+
+                <div class="empty-state">
+                    <div class="empty-icon">🔤</div>
+                    <h3 class="empty-title">Font Mixer</h3>
+                    <p class="empty-text">Esta herramienta se abre en una ventana separada para mejor experiencia</p>
+                    <button class="btn btn-primary" onclick="window.open('./apps/font-mixer/index.html', '_blank')">
+                        Abrir Font Mixer
+                    </button>
+                </div>
+            </div>
         </main>
-
-        <footer class="footer">
-            <p>© 2024 <a href="#">Calidevs</a>. Todas las herramientas que necesitas para tu equipo.</p>
-        </footer>
     </div>
 
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signOut, 
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut,
             onAuthStateChanged,
             updateProfile
         } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc, 
-            updateDoc,
+        import {
+            getFirestore,
             collection,
+            addDoc,
+            getDocs,
+            doc,
+            updateDoc,
+            deleteDoc,
             query,
-            where,
-            getDocs
+            orderBy,
+            onSnapshot,
+            setDoc,
+            getDoc
         } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         // Firebase Configuration
@@ -506,171 +1142,864 @@
             measurementId: "G-K0N0PNGSQD"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // DOM Elements
-        const authOverlay = document.getElementById('authOverlay');
-        const dashboard = document.getElementById('dashboard');
-        const authForm = document.getElementById('authForm');
-        const authTitle = document.getElementById('authTitle');
-        const authSubtitle = document.getElementById('authSubtitle');
-        const authSubmit = document.getElementById('authSubmit');
-        const authToggle = document.getElementById('authToggle');
-        const authMessage = document.getElementById('authMessage');
-        const nameGroup = document.getElementById('nameGroup');
+        // Global State
+        window.currentUser = null;
+        window.sessions = [];
+        window.tasks = [];
+        window.qualityProjects = [];
+        window.clients = [];
+        window.apiKey = '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';
 
         let isLoginMode = true;
+        let unsubscribeSessions = null;
+        let unsubscribeProjects = null;
+        let unsubscribeClients = null;
 
-        // Auth state observer
+        // ==================== AUTH ====================
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in
-                authOverlay.classList.remove('show');
-                dashboard.classList.add('show');
-                
-                // Update UI
+                window.currentUser = user;
+                document.getElementById('authOverlay').classList.remove('show');
+                document.getElementById('platform').classList.add('show');
+
                 document.getElementById('userName').textContent = user.displayName || user.email.split('@')[0];
                 document.getElementById('userEmail').textContent = user.email;
                 document.getElementById('userAvatar').textContent = (user.displayName || user.email)[0].toUpperCase();
-                
-                // Load user stats
-                await loadUserStats(user.uid);
-                
-                // Create/update user profile
-                await ensureUserProfile(user);
+
+                await loadUserSettings();
+                loadAllData();
             } else {
-                // User is signed out
-                authOverlay.classList.add('show');
-                dashboard.classList.remove('show');
+                window.currentUser = null;
+                document.getElementById('authOverlay').classList.add('show');
+                document.getElementById('platform').classList.remove('show');
+
+                if (unsubscribeSessions) unsubscribeSessions();
+                if (unsubscribeProjects) unsubscribeProjects();
+                if (unsubscribeClients) unsubscribeClients();
             }
         });
 
-        // Ensure user profile exists
-        async function ensureUserProfile(user) {
-            const userRef = doc(db, 'users', user.uid);
-            const userSnap = await getDoc(userRef);
-            
-            if (!userSnap.exists()) {
-                await setDoc(userRef, {
-                    email: user.email,
-                    displayName: user.displayName || user.email.split('@')[0],
-                    createdAt: new Date().toISOString(),
-                    lastLogin: new Date().toISOString(),
-                    apps: {
-                        noteTakerAI: { enabled: true }
-                    }
-                });
-            } else {
-                await updateDoc(userRef, {
-                    lastLogin: new Date().toISOString()
-                });
-            }
-        }
-
-        // Load user stats
-        async function loadUserStats(uid) {
-            try {
-                const sessionsRef = collection(db, `users/${uid}/sessions`);
-                const snapshot = await getDocs(sessionsRef);
-                
-                let totalTasks = 0;
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    if (data.tasks) {
-                        totalTasks += data.tasks.filter(t => !t.completed).length;
-                    }
-                });
-                
-                document.getElementById('statTasks').textContent = totalTasks;
-            } catch (error) {
-                console.error('Error loading stats:', error);
-            }
-        }
-
-        // Toggle auth mode
-        authToggle.addEventListener('click', () => {
+        document.getElementById('authToggle').addEventListener('click', () => {
             isLoginMode = !isLoginMode;
-            
-            if (isLoginMode) {
-                authTitle.textContent = 'Bienvenido';
-                authSubtitle.textContent = 'Inicia sesión para acceder a tus aplicaciones';
-                authSubmit.textContent = 'Iniciar Sesión';
-                authToggle.textContent = '¿No tienes cuenta? Regístrate';
-                nameGroup.style.display = 'none';
-            } else {
-                authTitle.textContent = 'Crear Cuenta';
-                authSubtitle.textContent = 'Regístrate para comenzar a usar las apps';
-                authSubmit.textContent = 'Registrarse';
-                authToggle.textContent = '¿Ya tienes cuenta? Inicia sesión';
-                nameGroup.style.display = 'block';
-            }
-            
-            hideMessage();
+            document.getElementById('authTitle').textContent = isLoginMode ? 'Bienvenido' : 'Crear Cuenta';
+            document.getElementById('authSubtitle').textContent = isLoginMode ? 'Inicia sesion para acceder a la plataforma' : 'Registrate para comenzar';
+            document.getElementById('authSubmit').textContent = isLoginMode ? 'Iniciar Sesion' : 'Registrarse';
+            document.getElementById('authToggle').textContent = isLoginMode ? 'No tienes cuenta? Registrate' : 'Ya tienes cuenta? Inicia sesion';
+            document.getElementById('nameGroup').style.display = isLoginMode ? 'none' : 'block';
+            document.getElementById('authMessage').className = 'auth-message';
         });
 
-        // Form submit
-        authForm.addEventListener('submit', async (e) => {
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const email = document.getElementById('authEmail').value;
             const password = document.getElementById('authPassword').value;
             const name = document.getElementById('authName').value;
-            
-            authSubmit.classList.add('btn-loading');
-            authSubmit.disabled = true;
-            hideMessage();
-            
+
             try {
                 if (isLoginMode) {
                     await signInWithEmailAndPassword(auth, email, password);
                 } else {
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    if (name) {
-                        await updateProfile(userCredential.user, { displayName: name });
-                    }
-                    showMessage('success', '✅ Cuenta creada exitosamente');
+                    if (name) await updateProfile(userCredential.user, { displayName: name });
+                    showAuthMessage('success', 'Cuenta creada exitosamente');
                 }
             } catch (error) {
-                showMessage('error', getErrorMessage(error.code));
-            } finally {
-                authSubmit.classList.remove('btn-loading');
-                authSubmit.disabled = false;
+                showAuthMessage('error', getErrorMessage(error.code));
             }
         });
 
-        // Logout
-        document.getElementById('btnLogout').addEventListener('click', async () => {
+        window.logout = async function() {
             try {
                 await signOut(auth);
             } catch (error) {
-                console.error('Error signing out:', error);
+                showToast('Error: ' + error.message);
             }
-        });
+        };
 
-        // Helper functions
-        function showMessage(type, text) {
-            authMessage.className = `auth-message ${type}`;
-            authMessage.textContent = text;
-        }
-
-        function hideMessage() {
-            authMessage.className = 'auth-message';
+        function showAuthMessage(type, msg) {
+            const el = document.getElementById('authMessage');
+            el.className = `auth-message ${type}`;
+            el.textContent = msg;
         }
 
         function getErrorMessage(code) {
             const messages = {
-                'auth/email-already-in-use': 'Este email ya está registrado',
-                'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres',
-                'auth/invalid-email': 'Email inválido',
+                'auth/email-already-in-use': 'Este email ya esta registrado',
+                'auth/weak-password': 'La contrasena debe tener al menos 6 caracteres',
+                'auth/invalid-email': 'Email invalido',
                 'auth/user-not-found': 'Usuario no encontrado',
-                'auth/wrong-password': 'Contraseña incorrecta',
-                'auth/invalid-credential': 'Credenciales inválidas',
-                'auth/too-many-requests': 'Demasiados intentos. Intenta más tarde'
+                'auth/wrong-password': 'Contrasena incorrecta',
+                'auth/invalid-credential': 'Credenciales invalidas'
             };
-            return messages[code] || 'Error de autenticación';
+            return messages[code] || 'Error de autenticacion';
+        }
+
+        async function loadUserSettings() {
+            try {
+                const settingsRef = collection(db, `users/${window.currentUser.uid}/settings`);
+                const snapshot = await getDocs(settingsRef);
+                if (!snapshot.empty) {
+                    const settings = snapshot.docs[0].data();
+                    if (settings.apiKey) window.apiKey = settings.apiKey;
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+
+        // ==================== DATA LOADING ====================
+        function loadAllData() {
+            loadTorchSessions();
+            loadQualityProjects();
+            loadCRMClients();
+        }
+
+        function loadTorchSessions() {
+            const sessionsRef = collection(db, `users/${window.currentUser.uid}/sessions`);
+            const q = query(sessionsRef, orderBy('timestamp', 'desc'));
+
+            unsubscribeSessions = onSnapshot(q, (snapshot) => {
+                window.sessions = [];
+                snapshot.forEach((doc) => {
+                    window.sessions.push({ id: doc.id, ...doc.data() });
+                });
+
+                loadAllTasks();
+                updateDashboardStats();
+                renderTorchTasks();
+                renderTorchPriority();
+                renderTorchTeam();
+            });
+        }
+
+        function loadAllTasks() {
+            window.tasks = [];
+            window.sessions.forEach((session) => {
+                if (session.tasks) {
+                    session.tasks.forEach((task, idx) => {
+                        window.tasks.push({ ...task, sessionId: session.id, taskIndex: idx, date: session.date });
+                    });
+                }
+            });
+
+            const activeTasks = window.tasks.filter(t => !t.completed).length;
+            document.getElementById('torchBadge').textContent = activeTasks;
+        }
+
+        function loadQualityProjects() {
+            const projectsRef = collection(db, `users/${window.currentUser.uid}/qualityProjects`);
+            const q = query(projectsRef, orderBy('createdAt', 'desc'));
+
+            unsubscribeProjects = onSnapshot(q, (snapshot) => {
+                window.qualityProjects = [];
+                snapshot.forEach((doc) => {
+                    window.qualityProjects.push({ id: doc.id, ...doc.data() });
+                });
+                updateDashboardStats();
+                renderQualityProjects();
+            });
+        }
+
+        function loadCRMClients() {
+            const clientsRef = collection(db, `users/${window.currentUser.uid}/clients`);
+            const q = query(clientsRef, orderBy('createdAt', 'desc'));
+
+            unsubscribeClients = onSnapshot(q, (snapshot) => {
+                window.clients = [];
+                snapshot.forEach((doc) => {
+                    window.clients.push({ id: doc.id, ...doc.data() });
+                });
+                updateDashboardStats();
+                renderCRMClients();
+            });
+        }
+
+        function updateDashboardStats() {
+            const activeTasks = window.tasks.filter(t => !t.completed).length;
+            document.getElementById('statTasks').textContent = activeTasks;
+            document.getElementById('statProjects').textContent = window.qualityProjects.length;
+            document.getElementById('statClients').textContent = window.clients.length;
+        }
+
+        // ==================== NAVIGATION ====================
+        window.switchModule = function(module) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.module-container').forEach(m => m.classList.remove('active'));
+
+            document.querySelector(`[data-module="${module}"]`).classList.add('active');
+            document.getElementById(`module-${module}`).classList.add('active');
+
+            if (window.innerWidth <= 1024) closeSidebar();
+        };
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => switchModule(item.dataset.module));
+        });
+
+        window.toggleSidebar = function() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        };
+
+        window.closeSidebar = function() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        };
+
+        // ==================== TORCH AI MODULE ====================
+        window.switchTorchTab = function(tab) {
+            document.querySelectorAll('#module-torch .tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('#module-torch .sub-view').forEach(v => v.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`torch-${tab}`).classList.add('active');
+        };
+
+        window.processTorchNote = async function() {
+            const noteText = document.getElementById('torchInput').value.trim();
+            if (!noteText) {
+                showToast('Escribe algo primero');
+                return;
+            }
+
+            showToast('Procesando con IA...');
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${window.apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4o-mini',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'Eres un asistente que extrae tareas de texto. Responde UNICAMENTE con un objeto JSON valido: {"tasks": [{"description": "...", "client": "...", "urgency": "Alta|Media|Baja", "type": "Trabajo|Personal", "dueDate": "DD/MM/YYYY o null", "responsibles": []}]}'
+                            },
+                            {
+                                role: 'user',
+                                content: `Hoy es ${new Date().toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.
+
+Analiza esta nota y extrae TODAS las tareas:
+- Descripcion clara
+- Cliente (o "Personal")
+- Urgencia (Alta/Media/Baja)
+- Tipo (Trabajo/Personal)
+- Fecha limite DD/MM/YYYY o null
+- Responsables: array de nombres o []
+
+Responde SOLO con JSON valido.
+
+Nota:
+${noteText}`
+                            }
+                        ],
+                        temperature: 0.3
+                    })
+                });
+
+                if (!response.ok) throw new Error('Error en OpenAI');
+
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content;
+
+                let parsedData;
+                try {
+                    parsedData = JSON.parse(aiResponse);
+                } catch (e) {
+                    const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+                    if (!jsonMatch) throw new Error('No se pudo extraer JSON');
+                    parsedData = JSON.parse(jsonMatch[0]);
+                }
+
+                if (!parsedData?.tasks?.length) {
+                    showToast('No se encontraron tareas');
+                    return;
+                }
+
+                const now = new Date();
+                const newSession = {
+                    timestamp: now.toISOString(),
+                    date: now.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }),
+                    time: now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
+                    originalText: noteText,
+                    tasks: parsedData.tasks.map(task => ({
+                        description: task.description || 'Sin descripcion',
+                        client: task.client || 'Personal',
+                        urgency: task.urgency || 'Media',
+                        type: task.type || 'Personal',
+                        dueDate: task.dueDate || null,
+                        responsibles: Array.isArray(task.responsibles) ? task.responsibles : [],
+                        completed: false
+                    }))
+                };
+
+                await addDoc(collection(db, `users/${window.currentUser.uid}/sessions`), newSession);
+                document.getElementById('torchInput').value = '';
+                showToast(`${parsedData.tasks.length} tareas creadas`);
+
+                // Switch to tasks tab
+                document.querySelectorAll('#module-torch .tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('#module-torch .sub-view').forEach(v => v.classList.remove('active'));
+                document.querySelectorAll('#module-torch .tab-btn')[1].classList.add('active');
+                document.getElementById('torch-tasks').classList.add('active');
+            } catch (error) {
+                showToast('Error: ' + error.message);
+            }
+        };
+
+        function renderTorchTasks() {
+            const container = document.getElementById('torchTasksList');
+            const active = window.tasks.filter(t => !t.completed);
+
+            if (active.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <h3 class="empty-title">Sin pendientes</h3>
+                        <p class="empty-text">Captura una nota para crear tareas</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="cards-grid">';
+            active.forEach((task) => {
+                const urgencyClass = task.urgency === 'Alta' ? 'danger' : task.urgency === 'Media' ? 'warning' : 'success';
+                html += `
+                    <div class="card" onclick="toggleTorchTask('${task.sessionId}', ${task.taskIndex})">
+                        <div class="card-header">
+                            <div class="card-icon">${task.urgency === 'Alta' ? '🔴' : task.urgency === 'Media' ? '🟡' : '🟢'}</div>
+                            <div>
+                                <div class="card-title">${task.description}</div>
+                                <div class="card-subtitle">👤 ${task.client}</div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-meta">${task.dueDate || 'Sin fecha'}</div>
+                            <span class="card-badge ${urgencyClass}">${task.urgency}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function renderTorchPriority() {
+            const container = document.getElementById('torchPriorityList');
+            const active = window.tasks.filter(t => !t.completed);
+
+            if (active.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🔥</div>
+                        <h3 class="empty-title">Sin pendientes</h3>
+                        <p class="empty-text">No hay tareas por prioridad</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            ['Alta', 'Media', 'Baja'].forEach(priority => {
+                const tasks = active.filter(t => t.urgency === priority);
+                if (tasks.length > 0) {
+                    const icon = priority === 'Alta' ? '🔴' : priority === 'Media' ? '🟡' : '🟢';
+                    html += `<h3 class="section-title">${icon} Prioridad ${priority} (${tasks.length})</h3>`;
+                    html += '<div class="cards-grid" style="margin-bottom: 32px;">';
+                    tasks.forEach(task => {
+                        html += `
+                            <div class="card" onclick="toggleTorchTask('${task.sessionId}', ${task.taskIndex})">
+                                <div class="card-header">
+                                    <div class="card-icon">${icon}</div>
+                                    <div>
+                                        <div class="card-title">${task.description}</div>
+                                        <div class="card-subtitle">👤 ${task.client}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        function renderTorchTeam() {
+            const container = document.getElementById('torchTeamList');
+            const active = window.tasks.filter(t => !t.completed);
+            const members = ['Carlos Armando', 'Sara', 'Ian', 'JC', 'Marlene', 'Papa'];
+
+            let html = '';
+            members.forEach(member => {
+                const tasks = active.filter(t => t.responsibles?.includes(member));
+                if (tasks.length > 0) {
+                    html += `<h3 class="section-title">👤 ${member} (${tasks.length})</h3>`;
+                    html += '<div class="cards-grid" style="margin-bottom: 32px;">';
+                    tasks.forEach(task => {
+                        html += `
+                            <div class="card">
+                                <div class="card-title">${task.description}</div>
+                                <div class="card-subtitle" style="margin-top: 8px;">📅 ${task.dueDate || 'Sin fecha'}</div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+            });
+
+            if (!html) {
+                html = `
+                    <div class="empty-state">
+                        <div class="empty-icon">👥</div>
+                        <h3 class="empty-title">Sin asignaciones</h3>
+                        <p class="empty-text">No hay tareas asignadas al equipo</p>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        window.toggleTorchTask = async function(sessionId, taskIndex) {
+            const session = window.sessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            session.tasks[taskIndex].completed = !session.tasks[taskIndex].completed;
+            await updateDoc(doc(db, `users/${window.currentUser.uid}/sessions`, sessionId), {
+                tasks: session.tasks
+            });
+            showToast(session.tasks[taskIndex].completed ? 'Tarea completada' : 'Tarea reabierta');
+        };
+
+        // ==================== QUALITY CONTROL MODULE ====================
+        const checklistData = [
+            {
+                id: 'seo',
+                name: 'SEO y Rendimiento',
+                icon: '⚡',
+                isOptional: true,
+                tasks: [
+                    { id: 'seo-1', title: 'Titulos y Meta Descripciones', desc: 'Verificar que todas las paginas tengan titulos unicos' },
+                    { id: 'seo-2', title: 'Estructura de Encabezados', desc: 'Asegurar jerarquia correcta (H1, H2, H3)' },
+                    { id: 'seo-5', title: 'Google Analytics', desc: 'Verificar instalacion de herramientas de analisis' },
+                    { id: 'seo-6', title: 'Sitemap XML', desc: 'Generar y enviar sitemap.xml' },
+                    { id: 'seo-7', title: 'Archivo Robots.txt', desc: 'Configurar robots.txt correctamente' }
+                ]
+            },
+            {
+                id: 'pre-launch',
+                name: 'Pre-Lanzamiento',
+                icon: '✨',
+                tasks: [
+                    { id: 'pre-1', title: 'Responsiveness', desc: 'Verificar en movil, tablet y desktop' },
+                    { id: 'pre-2', title: 'Redes Sociales', desc: 'Comprobar iconos vinculados correctamente' },
+                    { id: 'pre-3', title: 'Navegacion', desc: 'Verificar menus, especialmente movil' },
+                    { id: 'seo-3', title: 'Optimizacion de Imagenes', desc: 'Imagenes optimizadas (WebP)' },
+                    { id: 'seo-4', title: 'Carga y Rendimiento', desc: 'Configurar cache, minificacion, lazy loading' },
+                    { id: 'pre-4', title: 'Estructura de Blog', desc: 'Revisar header, footer, autor' },
+                    { id: 'pre-5', title: 'Estilo y Consistencia', desc: 'Consistencia en tipografia y colores' },
+                    { id: 'pre-6', title: 'Enlaces', desc: 'Revisar enlaces rotos (404)' },
+                    { id: 'pre-7', title: 'Contenido', desc: 'Revisar errores gramaticales' },
+                    { id: 'pre-8', title: 'Formularios', desc: 'Comprobar funcionamiento' },
+                    { id: 'pre-9', title: 'Favicon', desc: 'Favicon personalizado' },
+                    { id: 'pre-10', title: 'Limpiar Theme', desc: 'Borrar contenido innecesario' }
+                ]
+            },
+            {
+                id: 'security',
+                name: 'Seguridad y Tecnico',
+                icon: '🔒',
+                tasks: [
+                    { id: 'sec-1', title: 'Certificado SSL/HTTPS', desc: 'Verificar SSL activo' },
+                    { id: 'sec-2', title: 'Plugins de Seguridad', desc: 'Instalar Wordfence, Sucuri, etc.' },
+                    { id: 'sec-3', title: 'Sistema de Backups', desc: 'Configurar backups automaticos' },
+                    { id: 'sec-5', title: 'Pagina 404', desc: 'Crear pagina de error personalizada' }
+                ]
+            },
+            {
+                id: 'migration',
+                name: 'Migracion y Deploy',
+                icon: '🌍',
+                isOptional: true,
+                tasks: [
+                    { id: 'mig-1', title: 'Migracion a Dominio', desc: 'Migrar de desarrollo al dominio oficial' },
+                    { id: 'mig-2', title: 'Configuracion DNS', desc: 'Verificar registros DNS' },
+                    { id: 'mig-3', title: 'Correos Corporativos', desc: 'Configurar cuentas de correo' },
+                    { id: 'mig-4', title: 'Redirecciones 301', desc: 'Configurar redirecciones' },
+                    { id: 'mig-5', title: 'Testing en Produccion', desc: 'Probar en servidor final' }
+                ]
+            }
+        ];
+
+        window.switchQualityView = function(view) {
+            document.querySelectorAll('#module-quality .sub-view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`quality-${view}`).classList.add('active');
+        };
+
+        function renderQualityProjects() {
+            const container = document.getElementById('qualityProjectsList');
+
+            if (window.qualityProjects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📁</div>
+                        <h3 class="empty-title">Sin proyectos</h3>
+                        <p class="empty-text">Crea tu primer proyecto de control de calidad</p>
+                        <button class="btn btn-primary" onclick="switchQualityView('new')">+ Nuevo Proyecto</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="cards-grid">';
+            window.qualityProjects.forEach((project) => {
+                const { completed, total } = calculateQCProgress(project);
+                const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+                html += `
+                    <div class="card" onclick="openQualityProject('${project.id}')">
+                        <div class="card-header">
+                            <div class="card-icon">${project.completed ? '✅' : '📋'}</div>
+                            <div>
+                                <div class="card-title">${project.name}</div>
+                                <div class="card-subtitle">${project.client || 'Sin cliente'}</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>Progreso</span>
+                                <span>${progress}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill ${project.completed ? 'success' : ''}" style="width: ${progress}%"></div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-meta">${new Date(project.createdAt).toLocaleDateString('es-MX')}</div>
+                            <span class="card-badge ${project.completed ? 'success' : 'warning'}">${project.completed ? 'Completado' : 'En progreso'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function calculateQCProgress(project) {
+            let completed = 0, total = 0;
+            checklistData.forEach(cat => {
+                const isOptional = cat.isOptional;
+                const isEnabled = project.categoryEnabled ? project.categoryEnabled[cat.id] : false;
+                if (!isOptional || isEnabled) {
+                    cat.tasks.forEach(task => {
+                        total++;
+                        if (project.checklist && project.checklist[task.id]) completed++;
+                    });
+                }
+            });
+            return { completed, total };
+        }
+
+        window.createQualityProject = async function() {
+            const name = document.getElementById('qcProjectName').value.trim();
+            const client = document.getElementById('qcClientName').value.trim();
+            const url = document.getElementById('qcProjectUrl').value.trim();
+
+            if (!name) {
+                showToast('Ingresa el nombre del proyecto');
+                return;
+            }
+
+            const project = {
+                name,
+                client,
+                url,
+                completed: false,
+                completedDate: null,
+                createdAt: new Date().toISOString(),
+                checklist: {},
+                notes: {},
+                expandedCategories: {},
+                categoryEnabled: { seo: false, migration: false }
+            };
+
+            checklistData.forEach(cat => {
+                cat.tasks.forEach(task => {
+                    project.checklist[task.id] = false;
+                    project.notes[task.id] = '';
+                });
+            });
+
+            try {
+                await addDoc(collection(db, `users/${window.currentUser.uid}/qualityProjects`), project);
+                document.getElementById('qcProjectName').value = '';
+                document.getElementById('qcClientName').value = '';
+                document.getElementById('qcProjectUrl').value = '';
+                switchQualityView('list');
+                showToast('Proyecto creado');
+            } catch (error) {
+                showToast('Error: ' + error.message);
+            }
+        };
+
+        window.openQualityProject = function(id) {
+            const project = window.qualityProjects.find(p => p.id === id);
+            if (!project) return;
+
+            switchQualityView('detail');
+            const { completed, total } = calculateQCProgress(project);
+            const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+            let html = `
+                <div class="form-card" style="max-width: 100%; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
+                        <div>
+                            <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">${project.name}</h2>
+                            ${project.client ? `<p style="color: var(--light-muted);">👤 ${project.client}</p>` : ''}
+                            ${project.url ? `<p style="margin-top: 4px;"><a href="${project.url}" target="_blank" style="color: var(--accent);">🔗 ${project.url}</a></p>` : ''}
+                        </div>
+                        <span class="card-badge ${project.completed ? 'success' : 'warning'}">${progress}% completado</span>
+                    </div>
+                    <div class="progress-bar" style="margin-bottom: 20px;">
+                        <div class="progress-fill ${project.completed ? 'success' : ''}" style="width: ${progress}%"></div>
+                    </div>
+                    <button class="btn ${project.completed ? 'btn-secondary' : 'btn-primary'}" onclick="toggleQCComplete('${id}')">
+                        ${project.completed ? '🔄 Reabrir Proyecto' : '✅ Marcar Completado'}
+                    </button>
+                </div>
+            `;
+
+            checklistData.forEach(cat => {
+                const isOptional = cat.isOptional;
+                const isEnabled = project.categoryEnabled ? project.categoryEnabled[cat.id] : false;
+                const catCompleted = cat.tasks.filter(t => project.checklist && project.checklist[t.id]).length;
+
+                html += `
+                    <div class="form-card" style="max-width: 100%; margin-bottom: 16px; ${isOptional && !isEnabled ? 'opacity: 0.5;' : ''}">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h3 style="font-size: 16px; font-weight: 700;">${cat.icon} ${cat.name}</h3>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                ${isOptional ? `
+                                    <button class="btn ${isEnabled ? 'btn-primary' : 'btn-secondary'}" style="padding: 6px 12px; font-size: 12px;" onclick="toggleQCCategory('${id}', '${cat.id}')">
+                                        ${isEnabled ? '⭐ Incluido' : 'No incluido'}
+                                    </button>
+                                ` : ''}
+                                <span style="color: var(--light-muted); font-size: 14px;">${catCompleted}/${cat.tasks.length}</span>
+                            </div>
+                        </div>
+                `;
+
+                cat.tasks.forEach(task => {
+                    const isDisabled = isOptional && !isEnabled;
+                    const isChecked = project.checklist && project.checklist[task.id];
+                    html += `
+                        <div style="padding: 12px; background: var(--bg-darker); border-radius: 10px; margin-bottom: 8px; ${isDisabled ? 'opacity: 0.4;' : ''}">
+                            <label style="display: flex; align-items: center; gap: 12px; cursor: ${isDisabled ? 'not-allowed' : 'pointer'};">
+                                <input type="checkbox" ${isChecked ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}
+                                    onchange="toggleQCTask('${id}', '${task.id}')"
+                                    style="width: 20px; height: 20px; accent-color: var(--accent);">
+                                <div>
+                                    <div style="font-weight: 600; ${isChecked ? 'text-decoration: line-through; color: var(--success);' : ''}">${task.title}</div>
+                                    <div style="font-size: 13px; color: var(--light-muted);">${task.desc}</div>
+                                </div>
+                            </label>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+            });
+
+            document.getElementById('qualityProjectDetail').innerHTML = html;
+        };
+
+        window.toggleQCTask = async function(projectId, taskId) {
+            const project = window.qualityProjects.find(p => p.id === projectId);
+            if (!project) return;
+
+            if (!project.checklist) project.checklist = {};
+            project.checklist[taskId] = !project.checklist[taskId];
+
+            await updateDoc(doc(db, `users/${window.currentUser.uid}/qualityProjects`, projectId), {
+                checklist: project.checklist
+            });
+            openQualityProject(projectId);
+        };
+
+        window.toggleQCCategory = async function(projectId, catId) {
+            const project = window.qualityProjects.find(p => p.id === projectId);
+            if (!project) return;
+
+            if (!project.categoryEnabled) project.categoryEnabled = {};
+            project.categoryEnabled[catId] = !project.categoryEnabled[catId];
+
+            await updateDoc(doc(db, `users/${window.currentUser.uid}/qualityProjects`, projectId), {
+                categoryEnabled: project.categoryEnabled
+            });
+            openQualityProject(projectId);
+            showToast(project.categoryEnabled[catId] ? 'Categoria activada' : 'Categoria desactivada');
+        };
+
+        window.toggleQCComplete = async function(projectId) {
+            const project = window.qualityProjects.find(p => p.id === projectId);
+            if (!project) return;
+
+            const newState = !project.completed;
+            await updateDoc(doc(db, `users/${window.currentUser.uid}/qualityProjects`, projectId), {
+                completed: newState,
+                completedDate: newState ? new Date().toISOString() : null
+            });
+            showToast(newState ? 'Proyecto completado!' : 'Proyecto reabierto');
+            openQualityProject(projectId);
+        };
+
+        // ==================== CRM MODULE ====================
+        window.switchCRMView = function(view) {
+            document.querySelectorAll('#module-crm .sub-view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`crm-${view}`).classList.add('active');
+        };
+
+        function renderCRMClients() {
+            const container = document.getElementById('crmClientsList');
+
+            if (window.clients.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">👥</div>
+                        <h3 class="empty-title">Sin clientes</h3>
+                        <p class="empty-text">Agrega tu primer cliente</p>
+                        <button class="btn btn-primary" onclick="switchCRMView('new')">+ Nuevo Cliente</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="cards-grid">';
+            window.clients.forEach((client) => {
+                html += `
+                    <div class="card" onclick="openCRMClient('${client.id}')">
+                        <div class="card-header">
+                            <div class="card-icon">👤</div>
+                            <div>
+                                <div class="card-title">${client.name}</div>
+                                <div class="card-subtitle">${client.email || 'Sin email'}</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            ${client.phone ? `<p>📞 ${client.phone}</p>` : ''}
+                            ${client.notes ? `<p style="margin-top: 8px; font-size: 13px;">${client.notes.substring(0, 100)}${client.notes.length > 100 ? '...' : ''}</p>` : ''}
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-meta">${new Date(client.createdAt).toLocaleDateString('es-MX')}</div>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="event.stopPropagation(); deleteCRMClient('${client.id}')">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        window.createCRMClient = async function() {
+            const name = document.getElementById('crmClientName').value.trim();
+            const email = document.getElementById('crmClientEmail').value.trim();
+            const phone = document.getElementById('crmClientPhone').value.trim();
+            const notes = document.getElementById('crmClientNotes').value.trim();
+
+            if (!name) {
+                showToast('Ingresa el nombre del cliente');
+                return;
+            }
+
+            const client = {
+                name,
+                email,
+                phone,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                await addDoc(collection(db, `users/${window.currentUser.uid}/clients`), client);
+                document.getElementById('crmClientName').value = '';
+                document.getElementById('crmClientEmail').value = '';
+                document.getElementById('crmClientPhone').value = '';
+                document.getElementById('crmClientNotes').value = '';
+                switchCRMView('list');
+                showToast('Cliente guardado');
+            } catch (error) {
+                showToast('Error: ' + error.message);
+            }
+        };
+
+        window.openCRMClient = function(id) {
+            const client = window.clients.find(c => c.id === id);
+            if (!client) return;
+
+            switchCRMView('detail');
+            document.getElementById('crmClientDetail').innerHTML = `
+                <div class="form-card" style="max-width: 100%;">
+                    <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 24px;">👤 ${client.name}</h2>
+
+                    ${client.email ? `
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <p style="padding: 12px; background: var(--bg-darker); border-radius: 10px;">
+                                <a href="mailto:${client.email}" style="color: var(--accent);">${client.email}</a>
+                            </p>
+                        </div>
+                    ` : ''}
+
+                    ${client.phone ? `
+                        <div class="form-group">
+                            <label class="form-label">Telefono</label>
+                            <p style="padding: 12px; background: var(--bg-darker); border-radius: 10px;">
+                                <a href="tel:${client.phone}" style="color: var(--accent);">${client.phone}</a>
+                            </p>
+                        </div>
+                    ` : ''}
+
+                    ${client.notes ? `
+                        <div class="form-group">
+                            <label class="form-label">Notas</label>
+                            <p style="padding: 12px; background: var(--bg-darker); border-radius: 10px; white-space: pre-wrap;">${client.notes}</p>
+                        </div>
+                    ` : ''}
+
+                    <div style="margin-top: 24px; display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="deleteCRMClient('${id}')">🗑️ Eliminar Cliente</button>
+                    </div>
+                </div>
+            `;
+        };
+
+        window.deleteCRMClient = async function(id) {
+            if (!confirm('Eliminar este cliente?')) return;
+
+            try {
+                await deleteDoc(doc(db, `users/${window.currentUser.uid}/clients`, id));
+                switchCRMView('list');
+                showToast('Cliente eliminado');
+            } catch (error) {
+                showToast('Error: ' + error.message);
+            }
+        };
+
+        // ==================== UTILITIES ====================
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
         }
     </script>
 </body>
