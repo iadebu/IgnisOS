@@ -28,7 +28,6 @@ const defaultColumns = [
 const teamMembers = [
   { id: 'carlos', name: 'Carlos Armando', role: 'Frontend', color: 'bg-blue-500' },
   { id: 'ian', name: 'Ian', role: 'Soporte', color: 'bg-green-500' },
-  { id: 'robbie', name: 'Robbie', role: 'Backend', color: 'bg-orange-500' },
 ]
 
 const priorityOptions = [
