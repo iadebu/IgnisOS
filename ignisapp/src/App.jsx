@@ -13,6 +13,7 @@ import TorchAI from './pages/TorchAI'
 import QualityControl from './pages/QualityControl'
 import ProjectHub from './pages/ProjectHub'
 import Maintenance from './pages/Maintenance'
+import WeeklyOps from './pages/WeeklyOps'
 import FontMixer from './pages/FontMixer'
 
 // Protected Route Component
@@ -73,6 +74,7 @@ function App() {
           <Route path="quality" element={<QualityControl />} />
           <Route path="projects" element={<ProjectHub />} />
           <Route path="maintenance" element={<Maintenance />} />
+          <Route path="ops" element={<WeeklyOps />} />
           <Route path="fonts" element={<FontMixer />} />
         </Route>
       </Routes>

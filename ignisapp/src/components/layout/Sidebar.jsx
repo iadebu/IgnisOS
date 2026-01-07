@@ -5,6 +5,7 @@ import {
   CheckSquare,
   Kanban,
   Wrench,
+  CalendarDays,
   Type,
   Settings,
   LogOut,
@@ -16,6 +17,7 @@ import { useTasksStore } from '../../store/tasksStore'
 const navItems = [
   { path: '/', icon: LayoutDashboard, label: 'Dashboard', section: 'Principal' },
   { path: '/torch', icon: Flame, label: 'TorchAI', section: 'Módulos', badge: true },
+  { path: '/ops', icon: CalendarDays, label: 'Calidevs Ops', section: 'Módulos' },
   { path: '/quality', icon: CheckSquare, label: 'Control de Calidad', section: 'Módulos' },
   { path: '/projects', icon: Kanban, label: 'Project Hub', section: 'Módulos' },
   { path: '/maintenance', icon: Wrench, label: 'Mantenimiento', section: 'Módulos' },
