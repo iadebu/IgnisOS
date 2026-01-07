@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, Calendar, User, Users } from 'lucide-react'
+import { Check, Calendar, User, Users, ClipboardList, Circle, AlertCircle, CheckCircle } from 'lucide-react'
 
 export function TaskList({ tasks, onToggle, showCompleted = false, viewMode = 'list' }) {
   const activeTasks = tasks.filter(t => !t.completed)
@@ -8,7 +8,9 @@ export function TaskList({ tasks, onToggle, showCompleted = false, viewMode = 'l
   if (tasks.length === 0) {
     return (
       <div className="glass-card text-center py-12">
-        <div className="text-5xl mb-4 opacity-50">📋</div>
+        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
+          <ClipboardList className="w-8 h-8 text-white/30" />
+        </div>
         <h3 className="text-xl font-bold mb-2">Sin pendientes</h3>
         <p className="text-white/50">Captura una nota para crear tareas</p>
       </div>
@@ -32,7 +34,8 @@ export function TaskList({ tasks, onToggle, showCompleted = false, viewMode = 'l
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-bold flex items-center gap-2">
-          📋 Mis Pendientes
+          <ClipboardList className="w-5 h-5 text-orange-500" />
+          Mis Pendientes
         </h3>
         <span className="text-sm text-white/50">
           {activeTasks.length} pendientes · {completedTasks.length} completadas
@@ -138,10 +141,13 @@ function TaskCard({ task, onToggle, index }) {
     'Baja': 'border-l-green-500',
   }
 
-  const urgencyIcons = {
-    'Alta': '🔴',
-    'Media': '🟡',
-    'Baja': '🟢',
+  const UrgencyIcon = ({ urgency }) => {
+    const iconClass = {
+      'Alta': 'text-red-400',
+      'Media': 'text-yellow-400',
+      'Baja': 'text-green-400',
+    }
+    return <Circle className={`w-6 h-6 fill-current ${iconClass[urgency]}`} />
   }
 
   return (
@@ -157,14 +163,20 @@ function TaskCard({ task, onToggle, index }) {
       `}
     >
       <div className="flex items-start gap-3 mb-3">
-        <span className="text-2xl">{urgencyIcons[task.urgency]}</span>
+        <UrgencyIcon urgency={task.urgency} />
         <div>
           <h4 className="font-semibold">{task.description}</h4>
-          <p className="text-sm text-white/50">👤 {task.client}</p>
+          <p className="text-sm text-white/50 flex items-center gap-1">
+            <User className="w-3 h-3" />
+            {task.client}
+          </p>
         </div>
       </div>
       <div className="flex justify-between items-center text-sm text-white/40">
-        <span>{task.dueDate || 'Sin fecha'}</span>
+        <span className="flex items-center gap-1">
+          <Calendar className="w-3 h-3" />
+          {task.dueDate || 'Sin fecha'}
+        </span>
         <span className="badge badge-warning">{task.urgency}</span>
       </div>
     </motion.div>

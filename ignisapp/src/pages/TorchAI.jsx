@@ -135,7 +135,7 @@ ${noteText}`
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="space-y-6"
+      className="space-y-8"
     >
       {/* Header */}
       <div>
@@ -147,7 +147,7 @@ ${noteText}`
       </div>
 
       {/* Tabs */}
-      <div className="glass p-1.5 rounded-2xl flex gap-1">
+      <div className="glass p-2 rounded-2xl flex gap-2 max-w-2xl">
         {tabs.map((tab) => {
           const Icon = tab.icon
           return (

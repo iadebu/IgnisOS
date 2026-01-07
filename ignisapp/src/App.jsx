@@ -11,7 +11,6 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import TorchAI from './pages/TorchAI'
 import QualityControl from './pages/QualityControl'
-import CRM from './pages/CRM'
 import FontMixer from './pages/FontMixer'
 
 // Protected Route Component
@@ -70,7 +69,6 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="torch" element={<TorchAI />} />
           <Route path="quality" element={<QualityControl />} />
-          <Route path="crm" element={<CRM />} />
           <Route path="fonts" element={<FontMixer />} />
         </Route>
       </Routes>

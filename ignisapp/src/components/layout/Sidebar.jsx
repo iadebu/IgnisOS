@@ -16,7 +16,6 @@ const navItems = [
   { path: '/', icon: LayoutDashboard, label: 'Dashboard', section: 'Principal' },
   { path: '/torch', icon: Flame, label: 'TorchAI', section: 'Módulos', badge: true },
   { path: '/quality', icon: CheckSquare, label: 'Control de Calidad', section: 'Módulos' },
-  { path: '/crm', icon: Users, label: 'CRM', section: 'Módulos' },
   { path: '/fonts', icon: Type, label: 'Font Mixer', section: 'Herramientas' },
 ]
 
