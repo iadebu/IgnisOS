@@ -4,6 +4,7 @@ import {
   Flame,
   CheckSquare,
   Kanban,
+  Wrench,
   Type,
   Settings,
   LogOut,
@@ -17,6 +18,7 @@ const navItems = [
   { path: '/torch', icon: Flame, label: 'TorchAI', section: 'Módulos', badge: true },
   { path: '/quality', icon: CheckSquare, label: 'Control de Calidad', section: 'Módulos' },
   { path: '/projects', icon: Kanban, label: 'Project Hub', section: 'Módulos' },
+  { path: '/maintenance', icon: Wrench, label: 'Mantenimiento', section: 'Módulos' },
   { path: '/fonts', icon: Type, label: 'Font Mixer', section: 'Herramientas' },
 ]
 
