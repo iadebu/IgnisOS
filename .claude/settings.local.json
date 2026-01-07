@@ -4,7 +4,10 @@
       "Bash(if [ -d \"apps/markup-app/src\" ])",
       "Bash(then ls -la apps/markup-app/src/)",
       "Bash(else echo \"La carpeta src/ NO existe en el repositorio local\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)"
     ]
   }
 }
