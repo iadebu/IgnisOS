@@ -1,5 +1,18 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import {
+  ClipboardList,
+  CheckCircle2,
+  Users,
+  Flame,
+  Zap,
+  Mic,
+  FolderOpen,
+  UserPlus,
+  Type,
+  TrendingUp,
+  Sparkles
+} from 'lucide-react'
 import { StatCard, QuickAction } from '../components/ui/Card'
 import { useTasksStore } from '../store/tasksStore'
 import { useAuthStore } from '../store/authStore'
@@ -27,38 +40,39 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon="📋" value={activeTasks} label="Tareas Pendientes" color="orange" />
-        <StatCard icon="✅" value="0" label="Proyectos QC" color="green" />
-        <StatCard icon="👥" value="0" label="Clientes" color="blue" />
-        <StatCard icon="🔥" value="4" label="Módulos Activos" color="purple" />
+        <StatCard icon={ClipboardList} value={activeTasks} label="Tareas Pendientes" color="orange" />
+        <StatCard icon={CheckCircle2} value="0" label="Proyectos QC" color="green" />
+        <StatCard icon={Users} value="0" label="Clientes" color="blue" />
+        <StatCard icon={Flame} value="4" label="Módulos Activos" color="purple" />
       </div>
 
       {/* Quick Actions */}
       <div>
         <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <span>⚡</span> Acciones Rápidas
+          <Zap className="w-5 h-5 text-orange-500" />
+          Acciones Rápidas
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <QuickAction
-            icon="🎤"
+            icon={Mic}
             title="Capturar Nota"
             description="Graba o escribe"
             onClick={() => navigate('/torch')}
           />
           <QuickAction
-            icon="📁"
+            icon={FolderOpen}
             title="Nuevo Proyecto QC"
             description="Control de calidad"
             onClick={() => navigate('/quality')}
           />
           <QuickAction
-            icon="👤"
+            icon={UserPlus}
             title="Agregar Cliente"
             description="Nuevo contacto"
             onClick={() => navigate('/crm')}
           />
           <QuickAction
-            icon="🔤"
+            icon={Type}
             title="Font Mixer"
             description="Combinar tipografías"
             onClick={() => navigate('/fonts')}
@@ -69,12 +83,13 @@ export default function Dashboard() {
       {/* Recent Activity */}
       <div>
         <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <span>📈</span> Actividad Reciente
+          <TrendingUp className="w-5 h-5 text-orange-500" />
+          Actividad Reciente
         </h2>
         <div className="glass rounded-2xl divide-y divide-white/5">
           <div className="flex items-center gap-4 p-4">
-            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-xl">
-              🔥
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-orange-400" />
             </div>
             <div>
               <p className="font-medium">Bienvenido a IgnisOS</p>

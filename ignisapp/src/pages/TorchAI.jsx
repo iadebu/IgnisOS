@@ -1,6 +1,16 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Sparkles, Mic, List, Flame as FireIcon, Users } from 'lucide-react'
+import {
+  Sparkles,
+  Mic,
+  PenLine,
+  ClipboardList,
+  Flame,
+  Users,
+  FileEdit,
+  CircleDot,
+  User
+} from 'lucide-react'
 import { TaskList } from '../components/ui/TaskList'
 import { ViewToggle } from '../components/ui/ViewToggle'
 import { useTasksStore } from '../store/tasksStore'
@@ -9,10 +19,10 @@ import { useAuthStore } from '../store/authStore'
 const OPENAI_API_KEY = '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'
 
 const tabs = [
-  { id: 'capture', label: 'Capturar', icon: '✏️' },
-  { id: 'tasks', label: 'Pendientes', icon: '📋' },
-  { id: 'priority', label: 'Prioridad', icon: '🔥' },
-  { id: 'team', label: 'Equipo', icon: '👥' },
+  { id: 'capture', label: 'Capturar', icon: PenLine },
+  { id: 'tasks', label: 'Pendientes', icon: ClipboardList },
+  { id: 'priority', label: 'Prioridad', icon: Flame },
+  { id: 'team', label: 'Equipo', icon: Users },
 ]
 
 export default function TorchAI() {
@@ -115,6 +125,12 @@ ${noteText}`
     toggleTask(user.uid, sessionId, taskIndex)
   }
 
+  const priorityColors = {
+    'Alta': 'text-red-400',
+    'Media': 'text-yellow-400',
+    'Baja': 'text-green-400'
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -124,34 +140,38 @@ ${noteText}`
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
-          <span className="text-orange-500">🔥</span> TorchAI
+          <Flame className="w-8 h-8 text-orange-500" />
+          TorchAI
         </h1>
         <p className="text-white/50">Captura notas por voz o texto y deja que la IA las organice</p>
       </div>
 
       {/* Tabs */}
       <div className="glass p-1.5 rounded-2xl flex gap-1">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`
-              flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all
-              ${activeTab === tab.id
-                ? 'bg-orange-500 text-white'
-                : 'text-white/50 hover:text-white hover:bg-white/5'
-              }
-            `}
-          >
-            <span>{tab.icon}</span>
-            <span className="hidden sm:inline">{tab.label}</span>
-            {tab.id === 'tasks' && activeTasks.length > 0 && (
-              <span className="px-2 py-0.5 text-xs rounded-full bg-white/20">
-                {activeTasks.length}
-              </span>
-            )}
-          </button>
-        ))}
+        {tabs.map((tab) => {
+          const Icon = tab.icon
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`
+                flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all
+                ${activeTab === tab.id
+                  ? 'bg-orange-500 text-white'
+                  : 'text-white/50 hover:text-white hover:bg-white/5'
+                }
+              `}
+            >
+              <Icon className="w-5 h-5" />
+              <span className="hidden sm:inline">{tab.label}</span>
+              {tab.id === 'tasks' && activeTasks.length > 0 && (
+                <span className="px-2 py-0.5 text-xs rounded-full bg-white/20">
+                  {activeTasks.length}
+                </span>
+              )}
+            </button>
+          )
+        })}
       </div>
 
       {/* Tab Content */}
@@ -162,7 +182,8 @@ ${noteText}`
           className="glass-card max-w-2xl"
         >
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-            <span>📝</span> Nueva Nota
+            <FileEdit className="w-5 h-5 text-orange-500" />
+            Nueva Nota
           </h2>
           <textarea
             value={noteText}
@@ -214,13 +235,11 @@ Ejemplo:
             const priorityTasks = activeTasks.filter(t => t.urgency === priority)
             if (priorityTasks.length === 0) return null
 
-            const icons = { 'Alta': '🔴', 'Media': '🟡', 'Baja': '🟢' }
-
             return (
               <div key={priority}>
                 <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                  <span>{icons[priority]}</span>
-                  Prioridad {priority}
+                  <CircleDot className={`w-5 h-5 ${priorityColors[priority]}`} />
+                  <span>Prioridad {priority}</span>
                   <span className="text-white/40">({priorityTasks.length})</span>
                 </h3>
                 <TaskList tasks={priorityTasks} onToggle={handleToggle} viewMode="grid" />
@@ -243,7 +262,7 @@ Ejemplo:
             return (
               <div key={member}>
                 <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                  <span>👤</span>
+                  <User className="w-5 h-5 text-blue-400" />
                   {member}
                   <span className="text-white/40">({memberTasks.length})</span>
                 </h3>
@@ -253,7 +272,9 @@ Ejemplo:
           })}
           {!teamMembers.some(m => activeTasks.some(t => t.responsibles?.includes(m))) && (
             <div className="glass-card text-center py-12">
-              <div className="text-5xl mb-4 opacity-50">👥</div>
+              <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-white/30" />
+              </div>
               <h3 className="text-xl font-bold mb-2">Sin asignaciones</h3>
               <p className="text-white/50">No hay tareas asignadas al equipo</p>
             </div>
