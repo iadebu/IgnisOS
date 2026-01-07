@@ -135,11 +135,11 @@ ${noteText}`
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="space-y-8"
+      className="space-y-10"
     >
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+        <h1 className="text-3xl font-bold mb-3 flex items-center gap-3">
           <Flame className="w-8 h-8 text-orange-500" />
           TorchAI
         </h1>
@@ -147,7 +147,7 @@ ${noteText}`
       </div>
 
       {/* Tabs */}
-      <div className="glass p-2 rounded-2xl flex gap-2 max-w-2xl">
+      <div className="glass p-2 rounded-2xl flex gap-2 max-w-xl">
         {tabs.map((tab) => {
           const Icon = tab.icon
           return (

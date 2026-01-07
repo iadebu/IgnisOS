@@ -132,12 +132,12 @@ export default function QualityControl() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="space-y-8"
+      className="space-y-10"
     >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-bold mb-3 flex items-center gap-3">
             <CheckCircle2 className="w-8 h-8 text-green-500" />
             Control de Calidad
           </h1>
@@ -153,7 +153,7 @@ export default function QualityControl() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard icon={CheckCheck} value={completedProjects} label="Completados" color="green" />
         <StatCard icon={Clock} value={inProgressProjects} label="En Progreso" color="orange" />
         <StatCard icon={AlertCircle} value={pendingProjects} label="Pendientes" color="red" />

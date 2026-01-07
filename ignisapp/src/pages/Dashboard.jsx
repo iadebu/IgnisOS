@@ -3,12 +3,10 @@ import { motion } from 'framer-motion'
 import {
   ClipboardList,
   CheckCircle2,
-  Users,
   Flame,
   Zap,
   Mic,
   FolderOpen,
-  UserPlus,
   Type,
   TrendingUp,
   Sparkles
@@ -28,31 +26,30 @@ export default function Dashboard() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="space-y-8"
+      className="space-y-10"
     >
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold mb-2">
+        <h1 className="text-3xl font-bold mb-3">
           Hola, <span className="text-orange-500">{user?.displayName || 'Usuario'}</span>
         </h1>
         <p className="text-white/50">Bienvenido a IgnisOS. Aquí tienes un resumen de tu actividad.</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard icon={ClipboardList} value={activeTasks} label="Tareas Pendientes" color="orange" />
         <StatCard icon={CheckCircle2} value="0" label="Proyectos QC" color="green" />
-        <StatCard icon={Users} value="0" label="Clientes" color="blue" />
-        <StatCard icon={Flame} value="4" label="Módulos Activos" color="purple" />
+        <StatCard icon={Flame} value="3" label="Módulos Activos" color="purple" />
       </div>
 
       {/* Quick Actions */}
       <div>
-        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
           <Zap className="w-5 h-5 text-orange-500" />
           Acciones Rápidas
         </h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <QuickAction
             icon={Mic}
             title="Capturar Nota"
@@ -66,12 +63,6 @@ export default function Dashboard() {
             onClick={() => navigate('/quality')}
           />
           <QuickAction
-            icon={UserPlus}
-            title="Agregar Cliente"
-            description="Nuevo contacto"
-            onClick={() => navigate('/crm')}
-          />
-          <QuickAction
             icon={Type}
             title="Font Mixer"
             description="Combinar tipografías"
@@ -82,14 +73,14 @@ export default function Dashboard() {
 
       {/* Recent Activity */}
       <div>
-        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-orange-500" />
           Actividad Reciente
         </h2>
         <div className="glass rounded-2xl divide-y divide-white/5">
-          <div className="flex items-center gap-4 p-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-orange-400" />
+          <div className="flex items-center gap-4 p-5">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-orange-400" />
             </div>
             <div>
               <p className="font-medium">Bienvenido a IgnisOS</p>
