@@ -14,7 +14,9 @@
       "Bash(./node_modules/.bin/tailwindcss:*)",
       "Bash(npm ls:*)",
       "Bash(npm run build:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)"
     ]
   }
 }
