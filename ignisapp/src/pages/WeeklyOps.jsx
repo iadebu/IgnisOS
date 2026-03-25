@@ -28,9 +28,10 @@ const weekDays = [
 ]
 
 const statusOptions = [
-  { value: 'sin_empezar', label: 'Sin empezar', color: 'bg-gray-500', textColor: 'text-gray-300' },
-  { value: 'en_progreso', label: 'En progreso', color: 'bg-yellow-500', textColor: 'text-yellow-300' },
-  { value: 'listo', label: 'Listo', color: 'bg-green-500', textColor: 'text-green-300' },
+  { value: 'pendiente', label: 'Pendiente', color: 'bg-gray-500', textColor: 'text-gray-300' },
+  { value: 'en_progreso', label: 'En Progreso', color: 'bg-yellow-500', textColor: 'text-yellow-300' },
+  { value: 'completado', label: 'Completado', color: 'bg-green-500', textColor: 'text-green-300' },
+  { value: 'bloqueado', label: 'Bloqueado', color: 'bg-purple-500', textColor: 'text-purple-300' },
 ]
 
 const pressureOptions = [
@@ -63,7 +64,7 @@ export default function WeeklyOps() {
     icon: '',
     day: 'lunes',
     responsibles: [],
-    status: 'sin_empezar',
+    status: 'pendiente',
     pressure: '',
     dueDate: '',
     semaforo: '',
@@ -154,7 +155,7 @@ export default function WeeklyOps() {
       icon: '',
       day: selectedDay,
       responsibles: [],
-      status: 'sin_empezar',
+      status: 'pendiente',
       pressure: '',
       dueDate: '',
       semaforo: '',
